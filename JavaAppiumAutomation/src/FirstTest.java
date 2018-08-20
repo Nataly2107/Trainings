@@ -54,6 +54,11 @@ public class FirstTest {
                 5);
         searchText("Appium");
         Assert.assertTrue(getCountOfArticles()>0);
+        waitElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Can not find X to cancel button",
+                5);
+        Assert.assertTrue(elementIsAbsent(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']")));
 
 
     }
@@ -85,5 +90,8 @@ public class FirstTest {
                 15);
         int n = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']")).size();
         return n;
+    }
+    public boolean elementIsAbsent(By by){
+        return driver.findElements(by).isEmpty();
     }
 }
