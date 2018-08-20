@@ -45,7 +45,18 @@ public class FirstTest {
                 5);
         validateSearchTextInField();
     }
+    @Test
+    public void testSearching()
+    {
+        waitElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Can not find Search Wikipedia field",
+                5);
+        searchText("Appium");
+        Assert.assertTrue(getCountOfArticles()>0);
 
+
+    }
     private void waitElementAndClick(By by, String errorMessage, long timeout){
         waitElement(by, errorMessage, timeout);
         driver.findElement(by).click();
@@ -60,5 +71,19 @@ public class FirstTest {
                 "Can not find Search field",
                 10)
                 .getText(),"Search…");
+    }
+    private void searchText(String text){
+        waitElement(By.id("org.wikipedia:id/search_src_text"),
+                "Can not find Search field",
+                10)
+                .clear();
+        driver.findElement(By.id("org.wikipedia:id/search_src_text")).sendKeys(text);
+    }
+    public int getCountOfArticles(){
+        waitElement(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']"),
+                "Can not find articles",
+                15);
+        int n = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']")).size();
+        return n;
     }
 }
