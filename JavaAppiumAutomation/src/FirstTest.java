@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
     private AppiumDriver driver;
@@ -62,6 +63,23 @@ public class FirstTest {
 
 
     }
+    @Test
+    public void testValidateSearching()
+    {
+        String searchText="Android";
+        waitElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Can not find Search Wikipedia field",
+                5);
+        searchText(searchText);
+        int i=getCountOfArticles();
+        for(int n=1; n<=i; n++){
+            validateSearchWordInArticle(n, searchText);
+        }
+
+
+
+    }
     private void waitElementAndClick(By by, String errorMessage, long timeout){
         waitElement(by, errorMessage, timeout);
         driver.findElement(by).click();
@@ -93,5 +111,17 @@ public class FirstTest {
     }
     public boolean elementIsAbsent(By by){
         return driver.findElements(by).isEmpty();
+    }
+    private void validateSearchWordInArticle(int indexArticle, String text){
+        String xpath="//*[@resource-id='org.wikipedia:id/page_list_item_container']"+"["+indexArticle+"]"+"//*";
+        String title="";
+        List<WebElement> elements= driver.findElements(By.xpath(xpath));
+        for (WebElement el: elements
+             ) {
+            System.out.println(el.getText());
+            title+=el.getText();
+        }
+        Assert.assertTrue(title.contains(text));
+
     }
 }
