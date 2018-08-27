@@ -41,7 +41,7 @@ public class FirstTest {
                 By.id("org.wikipedia:id/search_container"),
                 "Can not find Search Wikipedia field",
                 5);
-        assertElementHasText(waitElement(By.id("org.wikipedia:id/search_src_text"),"Can not find Search field",5),"Search…");
+        assertElementHasText(waitElement(By.id("org.wikipedia:id/search_src_text"), "Can not find Search field", 5), "Search…");
     }
 
     @Test
@@ -53,8 +53,7 @@ public class FirstTest {
                 5);
         searchText(searchText);
         Assert.assertTrue(getCountOfArticles() > 0); //validate count of article
-        validateSearchWordInArticle(1, searchText);
-        waitElementAndClick(
+       waitElementAndClick(
                 By.id("org.wikipedia:id/search_close_btn"),
                 "Can not find X to cancel button",
                 5);
@@ -63,16 +62,23 @@ public class FirstTest {
 
     @Test
     public void Ex4() {
-        String searchText = "Android";
+        String searchText = "Appium";
+        boolean hasWord = true;
         waitElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
                 "Can not find Search Wikipedia field",
                 5);
         searchText(searchText);
-        int i = getCountOfArticles();
-        for (int n = 1; n <= i; n++) {
-            validateSearchWordInArticle(n, searchText);
+        List<WebElement> elements = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']"));
+        for (WebElement article :
+                elements) {
+            if(!validateSearchWordInArticle(article, searchText)){
+                hasWord=false;
+                System.out.print(validateSearchWordInArticle(article, searchText));
+            }
         }
+        Assert.assertTrue(hasWord);
+
     }
 
     private void waitElementAndClick(By by, String errorMessage, long timeout) {
@@ -109,16 +115,15 @@ public class FirstTest {
         return driver.findElements(by).isEmpty();
     }
 
-    private void validateSearchWordInArticle(int indexArticle, String text) {
-        String xpath = "//*[@resource-id='org.wikipedia:id/page_list_item_container']" + "[" + indexArticle + "]" + "//*";
+    private boolean validateSearchWordInArticle(WebElement article, String text) {
         String title = "";
-        List<WebElement> elements = driver.findElements(By.xpath(xpath));
+        List<WebElement> elements = article.findElements(By.xpath("//*"));
         for (WebElement el : elements
         ) {
             System.out.println(el.getText());
             title += el.getText();
         }
-        Assert.assertTrue(title.contains(text));
+       return title.contains(text);
 
     }
 }
