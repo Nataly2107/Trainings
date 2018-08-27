@@ -36,7 +36,7 @@ public class FirstTest {
     }
 
     @Test
-    public void testValidateSearch() {
+    public void Ex2() {
         waitElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
                 "Can not find Search Wikipedia field",
@@ -45,7 +45,7 @@ public class FirstTest {
     }
 
     @Test
-    public void testSearching() {
+    public void Ex3() {
         String searchText = "Android";
         waitElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
@@ -62,7 +62,7 @@ public class FirstTest {
     }
 
     @Test
-    public void testValidateSearching() {
+    public void Ex4() {
         String searchText = "Android";
         waitElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
