@@ -161,6 +161,24 @@ public class FirstTest {
                 "Can not find second saved article",
                 15
         );
+        waitElementAndClick(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Can not click on second saved article",
+                15
+        );
+        waitElement(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Can not find second saved article",
+                15
+        );
+
+        String title=waitElement(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Can not find title article",
+                15
+        ).getText();
+        Assert.assertEquals("Article title are not equals","Java (programming language)", title);
+
 
     }
 
