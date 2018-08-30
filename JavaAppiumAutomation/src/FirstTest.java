@@ -182,8 +182,25 @@ public class FirstTest {
 
     }
 
+    @Test
+    public void Ex6() {
+        String searchText = "Android";
+        waitElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Can not find Search Wikipedia field",
+                5);
+        searchText(searchText);
+        waitElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Android']"),
+                "Can not title article",
+                25);
+        assertElementPresent(By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']"),"Can not find title in article");
+    }
+
     private void waitElementAndClick(By by, String errorMessage, long timeout) {
         waitElement(by, errorMessage, timeout).click();
+    }
+    private void assertElementPresent(By by, String error){
+        Assert.assertTrue(error, driver.findElement(by).isDisplayed());
     }
 
     private void waitElementAndSendKey(By by, String text, String errorMessage, long timeout) {
