@@ -200,7 +200,7 @@ public class FirstTest {
         waitElement(by, errorMessage, timeout).click();
     }
     private void assertElementPresent(By by, String error){
-        Assert.assertTrue(error, driver.findElement(by).isDisplayed());
+        Assert.assertTrue(error, driver.findElements(by).size()==1);
     }
 
     private void waitElementAndSendKey(By by, String text, String errorMessage, long timeout) {
