@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -136,7 +137,7 @@ public class FirstTest {
                 "Can not find button to add to reading list",
                 10);
         waitElementAndClick(
-                By.xpath("//*[@text='"+nameFolder+"']"),
+                By.xpath("//*[@text='" + nameFolder + "']"),
                 "Can not find button greated folder",
                 10);
         waitElementAndClick(
@@ -148,14 +149,14 @@ public class FirstTest {
                 "Can not find button to My List",
                 5);
         waitElementAndClick(
-                By.xpath("//*[@text='"+nameFolder+"']"),
+                By.xpath("//*[@text='" + nameFolder + "']"),
                 "Can not find created folder",
                 5);
         swipeElementToLeft(
                 By.xpath("//*[@text='Appium']/.."),
                 "Can not find saved article"
         );
-        elementIsAbsent( By.xpath("//*[@text='Appium']"));
+        elementIsAbsent(By.xpath("//*[@text='Appium']"));
         waitElement(
                 By.xpath("//*[@text='Java (programming language)']"),
                 "Can not find second saved article",
@@ -172,12 +173,12 @@ public class FirstTest {
                 15
         );
 
-        String title=waitElement(
+        String title = waitElement(
                 By.id("org.wikipedia:id/view_page_title_text"),
                 "Can not find title article",
                 15
         ).getText();
-        Assert.assertEquals("Article title are not equals","Java (programming language)", title);
+        Assert.assertEquals("Article title are not equals", "Java (programming language)", title);
 
 
     }
@@ -190,17 +191,62 @@ public class FirstTest {
                 "Can not find Search Wikipedia field",
                 5);
         searchText(searchText);
-        waitElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Android']"),
+        waitElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='" + searchText + "']"),
                 "Can not title article",
                 25);
-        assertElementPresent(By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']"),"Can not find title in article");
+        assertElementPresent(By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']"), "Can not find title in article");
+    }
+
+    @Before
+    public void rotateToPortrait(){
+        driver.rotate(ScreenOrientation.PORTRAIT);
+    }
+    @Test
+    public void Ex7() {
+        String searchText = "Java";
+        String description = "Java (programming language)";
+        waitElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Can not find Search Wikipedia field",
+                5);
+        searchText(searchText);
+        waitElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='" + description + "']"),
+                "Can not title article",
+                25);
+        String title_before_rotation = waitElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "Can not find title article and get text",
+                15
+        );
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+        String title_after_rotation = waitElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "Can not find title article and get text",
+                15
+        );
+        Assert.assertEquals("Article title are not equals", title_after_rotation, title_before_rotation);
+        driver.rotate(ScreenOrientation.PORTRAIT);
+        String title_after_second_rotation = waitElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "Can not find title article and get text",
+                15
+        );
+        Assert.assertEquals("Article title are not equals", title_after_second_rotation, title_before_rotation);
+    }
+
+    private String waitElementAndGetAttribute(By by, String attribute, String error, long timeout) {
+        return waitElement(by, error, timeout).getAttribute(attribute);
     }
 
     private void waitElementAndClick(By by, String errorMessage, long timeout) {
         waitElement(by, errorMessage, timeout).click();
     }
-    private void assertElementPresent(By by, String error){
-        Assert.assertTrue(error, driver.findElements(by).size()==1);
+
+    private void assertElementPresent(By by, String error) {
+        Assert.assertTrue(error, driver.findElements(by).size() == 1);
     }
 
     private void waitElementAndSendKey(By by, String text, String errorMessage, long timeout) {
@@ -250,21 +296,22 @@ public class FirstTest {
         return title.contains(text);
 
     }
-    protected void swipeElementToLeft(By by, String error){
-       WebElement element = waitElement(by, error,10);
-       int left_x = element.getLocation().getX();
-       int right_x = left_x + element.getSize().getWidth();
-       int upper_y = element.getLocation().getY();
-       int lower_y = upper_y + element.getSize().getHeight();
-       int middle_y = (upper_y+lower_y)/2;
 
-       TouchAction action = new TouchAction(driver);
-       action
-               .press(right_x, middle_y)
-               .waitAction(300)
-               .moveTo(left_x,middle_y)
-               .release()
-               .perform();
+    protected void swipeElementToLeft(By by, String error) {
+        WebElement element = waitElement(by, error, 10);
+        int left_x = element.getLocation().getX();
+        int right_x = left_x + element.getSize().getWidth();
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int middle_y = (upper_y + lower_y) / 2;
+
+        TouchAction action = new TouchAction(driver);
+        action
+                .press(right_x, middle_y)
+                .waitAction(300)
+                .moveTo(left_x, middle_y)
+                .release()
+                .perform();
     }
 
 }
