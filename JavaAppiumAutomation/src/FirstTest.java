@@ -137,5 +137,19 @@ public class FirstTest extends CoreTestCase {
         Assert.assertEquals("Article title are not equals", title_after_second_rotation, title_before_rotation);
     }
 
-
+    @Test
+    public void testEx9() {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.searchText("Java");
+        searchPageObject.waitForElementByTitleAndDescription(
+                "Java (programming language)",
+                "Object-oriented programming language");
+        searchPageObject.waitForElementByTitleAndDescription(
+                "Java",
+                "Island of Indonesia");
+        searchPageObject.waitForElementByTitleAndDescription(
+                "JavaScript",
+                "Programming language");
+    }
 }
