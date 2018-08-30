@@ -30,6 +30,7 @@ public class FirstTest {
         capabilities.setCapability("app", "C:\\Users\\Test\\learning\\Trainings\\JavaAppiumAutomation\\apks\\org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver.rotate(ScreenOrientation.PORTRAIT);
     }
 
     @After
@@ -197,10 +198,7 @@ public class FirstTest {
         assertElementPresent(By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']"), "Can not find title in article");
     }
 
-    @Before
-    public void rotateToPortrait(){
-        driver.rotate(ScreenOrientation.PORTRAIT);
-    }
+
     @Test
     public void Ex7() {
         String searchText = "Java";
