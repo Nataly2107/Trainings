@@ -1,7 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -9,11 +9,11 @@ import java.util.List;
 public class SearchPageObject extends MainPageObject {
 
     private static final String
-            SEARCH_INIT_ELEMENT = "org.wikipedia:id/search_container",
-            SEARCH_INPUT = "org.wikipedia:id/search_src_text",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
-            SEARCH_ARTICLES = "//*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_RESULT_BY_TITLE_DESCRIPTION = "//*[@resource-id='org.wikipedia:id/fragment_search_results']//*[@text='{TITLE}']/../*[@text='{DESCRIPTION}']";
+            SEARCH_INIT_ELEMENT = "id:org.wikipedia:id/search_container",
+            SEARCH_INPUT = "id:org.wikipedia:id/search_src_text",
+            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
+            SEARCH_ARTICLES = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']",
+            SEARCH_RESULT_BY_TITLE_DESCRIPTION = "xpath://*[@resource-id='org.wikipedia:id/fragment_search_results']//*[@text='{TITLE}']/../*[@text='{DESCRIPTION}']";
 
 
     public SearchPageObject(AppiumDriver driver) {
@@ -31,16 +31,16 @@ public class SearchPageObject extends MainPageObject {
 
     //
     public void initSearchInput() {
-        this.waitElementAndClick(By.id(SEARCH_INIT_ELEMENT),
+        this.waitElementAndClick(SEARCH_INIT_ELEMENT,
                 "Can not find and Click Search init element",
                 15);
-        this.waitElement(By.id(SEARCH_INIT_ELEMENT),
+        this.waitElement(SEARCH_INIT_ELEMENT,
                 "Can not find search input after clicking search init element",
                 15);
     }
 
     public void typeSearchLine(String search_line) {
-        this.waitElementAndSendKey(By.id(SEARCH_INPUT),
+        this.waitElementAndSendKey(SEARCH_INPUT,
                 search_line,
                 "Can not click and type search word in input field",
                 15);
@@ -48,21 +48,21 @@ public class SearchPageObject extends MainPageObject {
 
     public void waitForSearchResult(String substring) {
         String searchResult = getResultSearchElement(substring);
-        this.waitElement(By.xpath(SEARCH_RESULT_BY_SUBSTRING_TPL),
+        this.waitElement(SEARCH_RESULT_BY_SUBSTRING_TPL,
                 "Can not find search result with substring " + substring,
                 15);
     }
 
     public void openArticle(String article) {
         String searchResult = getResultSearchElement(article);
-        this.waitElementAndClick(By.xpath(SEARCH_RESULT_BY_SUBSTRING_TPL),
+        this.waitElementAndClick(SEARCH_RESULT_BY_SUBSTRING_TPL,
                 "Can not find search result with substring " + article,
                 15);
     }
 
     public boolean validateSearchResult(String searchText) {
         boolean hasWord = true;
-        List<WebElement> elements = driver.findElements(By.xpath(SEARCH_ARTICLES));
+        List<WebElement> elements = driver.findElements(getLocatorByString(SEARCH_ARTICLES));
         for (WebElement article :
                 elements) {
             if (!this.validateSearchWordInArticle(article, searchText)) {
@@ -75,7 +75,7 @@ public class SearchPageObject extends MainPageObject {
 
     public void waitForElementByTitleAndDescription(String title, String description) {
         String s = getResultSearchElementByTitleDescription(title, description);
-        this.waitElement(By.xpath(getResultSearchElementByTitleDescription(title, description)),
+        this.waitElement(getResultSearchElementByTitleDescription(title, description),
                 "Can not find article with title " + title + " and decription " + description,
                 25);
 
