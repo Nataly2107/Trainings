@@ -1,5 +1,10 @@
+package lib.Tests;
+
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
+import lib.ui.Factories.ArticlePageObjectFactory;
+import lib.ui.Factories.MyListPageObjectFactory;
+import lib.ui.Factories.SearchPageObjectFactory;
 import lib.ui.MainPageObject;
 import lib.ui.MyListPageObject;
 import lib.ui.SearchPageObject;
@@ -7,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.ScreenOrientation;
 
-public class FirstTest extends CoreTestCase {
+public class Tests extends CoreTestCase {
 
     private MainPageObject mainPageObject;
 
@@ -18,7 +23,7 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testEx2() {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         mainPageObject.assertElementHasText(
                 mainPageObject.waitElement(
@@ -31,7 +36,7 @@ public class FirstTest extends CoreTestCase {
     @Test
     public void testEx3() {
         String searchText = "Android";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(searchText);
         searchPageObject.waitForSearchResult(searchText);
@@ -41,7 +46,7 @@ public class FirstTest extends CoreTestCase {
     public void testEx4() {
         String searchText = "Appium";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(searchText);
         Assert.assertTrue(searchPageObject.validateSearchResult(searchText));
@@ -49,12 +54,12 @@ public class FirstTest extends CoreTestCase {
     }
 
     @Test
-    public void testEx5() {
+    public void testEx5Ex11() {
         String searchText = "Appium";
         String nameFolder = "Learning programming";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-        MyListPageObject myListPageObject = new MyListPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
+        MyListPageObject myListPageObject = MyListPageObjectFactory.get(driver);
 
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(searchText);
@@ -67,7 +72,7 @@ public class FirstTest extends CoreTestCase {
         articlePageObject.clickOnNavigateUp();
 
         searchPageObject.initSearchInput();
-        searchPageObject.searchText("Java");
+        searchPageObject.typeSearchLine("Java");
         searchPageObject.openArticle("Java (programming language)");
         articlePageObject.clickOnMoreOptions();
         articlePageObject.clickOnAddReadingList();
@@ -76,7 +81,7 @@ public class FirstTest extends CoreTestCase {
 
         myListPageObject.openMyList();
         myListPageObject.openListByName(nameFolder);
-        myListPageObject.deleteArticleFromList(searchText);
+        myListPageObject.deleteArticleFromList("Java (programming language)");
         myListPageObject.validateArticleIsAbsent(searchText);
         myListPageObject.openListByName("Java (programming language)");
 
@@ -94,8 +99,8 @@ public class FirstTest extends CoreTestCase {
     @Test
     public void testEx6() {
         String searchText = "Android";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.searchText("Java");
         searchPageObject.openArticle("Java (programming language)");
@@ -107,8 +112,8 @@ public class FirstTest extends CoreTestCase {
     public void testEx7() {
         String searchText = "Java";
         String description = "Java (programming language)";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.searchText(searchText);
         searchPageObject.waitForSearchResult(description);
@@ -138,7 +143,7 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testEx9() {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.searchText("Java");
         searchPageObject.waitForElementByTitleAndDescription(

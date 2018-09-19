@@ -2,18 +2,19 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class SearchPageObject extends MainPageObject {
+public abstract class SearchPageObject extends MainPageObject {
 
-    private static final String
-            SEARCH_INIT_ELEMENT = "id:org.wikipedia:id/search_container",
-            SEARCH_INPUT = "id:org.wikipedia:id/search_src_text",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
-            SEARCH_ARTICLES = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_RESULT_BY_TITLE_DESCRIPTION = "xpath://*[@resource-id='org.wikipedia:id/fragment_search_results']//*[@text='{TITLE}']/../*[@text='{DESCRIPTION}']";
+     protected static  String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_RESULT_BY_SUBSTRING_TPL ,
+            SEARCH_ARTICLES ,
+            SEARCH_RESULT_BY_TITLE_DESCRIPTION ;
 
 
     public SearchPageObject(AppiumDriver driver) {
@@ -40,12 +41,19 @@ public class SearchPageObject extends MainPageObject {
     }
 
     public void typeSearchLine(String search_line) {
+
         this.waitElementAndSendKey(SEARCH_INPUT,
                 search_line,
                 "Can not click and type search word in input field",
                 15);
     }
-
+    public void searchText(String text) {
+        waitElement("id:org.wikipedia:id/search_src_text",
+                "Can not find Search field",
+                10)
+                .clear();
+        driver.findElement(By.id("org.wikipedia:id/search_src_text")).sendKeys(text);
+    }
     public void waitForSearchResult(String substring) {
         String searchResult = getResultSearchElement(substring);
         this.waitElement(SEARCH_RESULT_BY_SUBSTRING_TPL,
@@ -55,7 +63,7 @@ public class SearchPageObject extends MainPageObject {
 
     public void openArticle(String article) {
         String searchResult = getResultSearchElement(article);
-        this.waitElementAndClick(SEARCH_RESULT_BY_SUBSTRING_TPL,
+        this.waitElementAndClick(searchResult,
                 "Can not find search result with substring " + article,
                 15);
     }
